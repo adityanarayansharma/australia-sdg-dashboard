@@ -1,4 +1,4 @@
-#Author:Aditya Narayan Sharma
+#Author: Aditya Narayan Sharma
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,13 +90,8 @@
     }
     @media print {
       @page { size: A4 portrait; margin: 16mm; }
-      body { background: #FFFFFF !important; color: #0F172A !important; }
-      body.printing-brief header,
-      body.printing-brief main,
-      body.printing-brief footer,
-      body.printing-brief #goalModal,
-      body.printing-brief #provenanceModal,
-      body.printing-brief #toastContainer,
+      html, body { background: #FFFFFF !important; color: #0F172A !important; height: auto !important; min-height: 0 !important; overflow: visible !important; }
+      body.printing-brief > *:not(#policyBriefModal) { display: none !important; }
       body.printing-brief #closeBriefBtn,
       body.printing-brief #closeBriefSecondaryBtn,
       body.printing-brief #printBriefBtn { display: none !important; }
@@ -2816,7 +2811,6 @@
       document.getElementById('printBriefBtn')?.addEventListener('click', () => {
         document.body.classList.add('printing-brief');
         window.print();
-        setTimeout(() => document.body.classList.remove('printing-brief'), 500);
       });
       window.addEventListener('afterprint', () => {
         document.body.classList.remove('printing-brief');
