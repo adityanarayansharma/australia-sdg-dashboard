@@ -973,12 +973,8 @@
         <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
         <span>Australia SDG Progress &amp; Post-2030 Tracker • Aditya Narayan Sharma</span>
       </div>
-      <div class="mt-2 sm:mt-0 flex flex-wrap items-center gap-3 text-[11px]">
-        <span>Total Visits: <strong id="publicVisitorCount" class="text-slate-800 tabular-nums">—</strong></span>
-        <span class="text-slate-300">•</span>
-        <span>Visitor Country: <strong id="visitorCountryDisplay" class="text-slate-800">Detecting...</strong></span>
-        <span class="text-slate-300 hidden md:inline">•</span>
-        <span class="hidden md:inline text-slate-500">Sources: World Bank • UN SDSN • ABS • DCCEEW</span>
+      <div class="mt-2 sm:mt-0 tabular-nums text-[11px]">
+        Source APIs: World Bank Open API • UN SDSN • ABS • DCCEEW National Greenhouse Gas Inventory
       </div>
     </div>
   </footer>
@@ -2831,38 +2827,10 @@
       });
     }
 
-    async function initPublicVisitorTracker() {
-      const countEl = document.getElementById('publicVisitorCount');
-      const countryEl = document.getElementById('visitorCountryDisplay');
-      try {
-        const res = await fetch('https://api.counterapi.dev/v1/aditya-aus-sdg-dashboard/visits/up');
-        if (res.ok) {
-          const data = await res.json();
-          if (countEl && data && typeof data.count === 'number') {
-            countEl.textContent = data.count.toLocaleString();
-          }
-        }
-      } catch (e) {
-        if (countEl) countEl.textContent = '1';
-      }
-      try {
-        const geoRes = await fetch('https://get.geojs.io/v1/ip/country.json');
-        if (geoRes.ok) {
-          const geo = await geoRes.json();
-          if (countryEl && geo && geo.name) {
-            countryEl.textContent = geo.country ? `${geo.name} (${geo.country})` : geo.name;
-          }
-        }
-      } catch (e) {
-        if (countryEl) countryEl.textContent = 'Global';
-      }
-    }
-
     // Hook into DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {
       initPost2030ViewSwitchers();
       initProvenanceAndScenarios();
-      initPublicVisitorTracker();
     });
   </script>
 </body>
