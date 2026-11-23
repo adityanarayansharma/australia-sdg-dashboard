@@ -973,8 +973,10 @@
         <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
         <span>Australia SDG Progress &amp; Post-2030 Tracker • Aditya Narayan Sharma</span>
       </div>
-      <div class="mt-2 sm:mt-0 tabular-nums text-[11px]">
-        Source APIs: World Bank Open API • UN SDSN • ABS • DCCEEW National Greenhouse Gas Inventory
+      <div class="mt-2 sm:mt-0 flex flex-wrap items-center gap-3 tabular-nums text-[11px]">
+        <span class="text-slate-500">Source APIs: World Bank Open API • UN SDSN • ABS • DCCEEW</span>
+        <span class="text-slate-300">•</span>
+        <span class="text-slate-500">Visits: <strong id="publicVisitorCount" class="text-slate-700 font-semibold">—</strong></span>
       </div>
     </div>
   </footer>
@@ -2827,10 +2829,51 @@
       });
     }
 
+    async function initSubtleVisitorCounter() {
+      const countEl = document.getElementById('publicVisitorCount');
+      if (!countEl) return;
+      let countSet = false;
+
+      try {
+        const res = await fetch('https://abacus.jasoncameron.dev/hit/aditya-aus-sdg-dashboard/visits');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data.value === 'number') {
+            countEl.textContent = data.value.toLocaleString();
+            countSet = true;
+          }
+        }
+      } catch (e) {}
+
+      if (!countSet) {
+        try {
+          const res2 = await fetch('https://api.counterapi.dev/v1/aditya-aus-sdg-dashboard/visits/up');
+          if (res2.ok) {
+            const d2 = await res2.json();
+            if (d2 && typeof d2.count === 'number') {
+              countEl.textContent = d2.count.toLocaleString();
+              countSet = true;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (!countSet) {
+        try {
+          const prev = parseInt(localStorage.getItem('aus_sdg_local_visits') || '0', 10) + 1;
+          localStorage.setItem('aus_sdg_local_visits', String(prev));
+          countEl.textContent = prev.toLocaleString();
+        } catch (e) {
+          countEl.textContent = '1';
+        }
+      }
+    }
+
     // Hook into DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {
       initPost2030ViewSwitchers();
       initProvenanceAndScenarios();
+      initSubtleVisitorCounter();
     });
   </script>
 </body>
