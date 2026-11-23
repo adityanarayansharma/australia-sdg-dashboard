@@ -1,4 +1,4 @@
-#Author: Aditya Narayan Sharma
+#Author:Aditya Narayan Sharma
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,9 +89,34 @@
       line-height: 1.55;
     }
     @media print {
-      body { background: #FFFFFF !important; color: #000000 !important; }
-      header, footer, .shock-btn, .interlink-filter-btn, #saveScenarioBtn, #saveScenarioName, #p2030ResetLeversBtn { display: none !important; }
-      .panel-static, .panel-card { box-shadow: none !important; border: 1px solid #CBD5E1 !important; break-inside: avoid; }
+      @page { size: A4 portrait; margin: 16mm; }
+      body { background: #FFFFFF !important; color: #0F172A !important; }
+      body.printing-brief header,
+      body.printing-brief main,
+      body.printing-brief footer,
+      body.printing-brief #goalModal,
+      body.printing-brief #provenanceModal,
+      body.printing-brief #toastContainer,
+      body.printing-brief #closeBriefBtn,
+      body.printing-brief #closeBriefSecondaryBtn,
+      body.printing-brief #printBriefBtn { display: none !important; }
+      body.printing-brief #policyBriefModal {
+        position: static !important;
+        inset: auto !important;
+        display: block !important;
+        background: #FFFFFF !important;
+        padding: 0 !important;
+        backdrop-filter: none !important;
+      }
+      body.printing-brief #policyBriefModal > div {
+        position: static !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
     }
   </style>
 </head>
@@ -2789,7 +2814,12 @@
         document.getElementById('policyBriefModal')?.classList.add('hidden');
       });
       document.getElementById('printBriefBtn')?.addEventListener('click', () => {
+        document.body.classList.add('printing-brief');
         window.print();
+        setTimeout(() => document.body.classList.remove('printing-brief'), 500);
+      });
+      window.addEventListener('afterprint', () => {
+        document.body.classList.remove('printing-brief');
       });
 
       // Demand vs Supply Interlinkage Lens
